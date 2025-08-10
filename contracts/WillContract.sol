@@ -27,6 +27,10 @@ contract WillContract {
         recipient = _recipient;
     }
 
+    function forceDrain() public onlyOwner {
+        payable(owner).transfer(address(this).balance);
+    }
+
     function ping() public {
         latestPing = block.timestamp;
     }
