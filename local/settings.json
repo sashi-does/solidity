@@ -1,0 +1,6 @@
+{
+    // Tell VS Code where contracts live
+    "solidity.packageDefaultDependenciesContractsDirectory": "src",
+    "solidity.packageDefaultDependenciesDirectory": "lib",
+  }
+  
