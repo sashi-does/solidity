@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 import "../src/HDI.sol";
 import "forge-std/console.sol";
 
-contract TestContract is Test {
+contract HDI_Test is Test {
     HDI h;
     address _example1 = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
     address _example2 = 0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678;
@@ -23,7 +23,7 @@ contract TestContract is Test {
         console.log(address(this));
 
         h.mint(_example1, 100);
-        
+
         assertEq(h.balanceOf(_example1), 100, "ok");
     }
 
@@ -58,6 +58,27 @@ contract TestContract is Test {
         assertEq(h.balanceOf(address(this)), 75, "ok");
         assertEq(h.allowance(address(this), _example1), 25, "ok");
 
+    }
+
+    function test_RevertMint() public {
+        vm.prank(_example1);
+        vm.expectRevert();
+        h.mint(_example1, 100);
+    }
+
+    function test_RevertTransfer() public {
+        h.mint(address(this), 100);
+        vm.expectRevert();
+        h.transfer(_example1, 101);
+    }
+
+    function test_RevertApproval() public {
+        h.mint(address(this), 100);
+        h.approve(_example1, 50);
+
+        vm.prank(_example1);
+        vm.expectRevert();
+        h.transferFrom(address(this), _example1, 51);
     }
 
 }
