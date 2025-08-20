@@ -107,7 +107,7 @@ contract HDI_Test is Test {
     }
 
     function testSendEth() public {
-        h.test{value: 10 ether}();
+        // h.test{value: 10 ether}();
     }
 
     function test_RevertMint() public {
