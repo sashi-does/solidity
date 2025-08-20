@@ -28,19 +28,54 @@ contract HDI_Test is Test {
     }
 
     function testTransfer() public {
-        h.mint(address(this), 1000);
+        h.mint(address(this), 500);
         h.transfer(_example1, 500);
 
         assertEq(h.balanceOf(_example1), 500);
-        assertEq(h.balanceOf(address(this)), 500);
+        assertEq(h.balanceOf(address(this)), 0);
 
         //-> msg.sender will always be the contract address
         //-> so prank() will let us to manipulate the EVM to modfiy the msg.sender
         //-> only for local sol dev
         vm.prank(_example1); //-> changes who the function will call
-        h.transfer(msg.sender, 500);
+        console.logAddress(_example1);
+        console.logAddress(msg.sender);
 
-        assertEq(h.balanceOf(_example1), 0);
+        // h.transfer(msg.sender, 500);
+
+        assertEq(h.balanceOf(address(this)), 0);
+    }
+
+    function testStartPrank() public {
+        h.mint(address(this), 100);
+        h.transfer(_example1, 100);
+
+        vm.startPrank(_example1);
+
+        h.transfer(msg.sender, 10);
+        h.transfer(msg.sender, 10);
+        h.transfer(msg.sender, 10);
+        h.transfer(msg.sender, 10);
+
+        vm.stopPrank();
+
+        assertEq(h.balanceOf(address(this)), 60);
+
+    }
+    
+    // deals in solidity
+    function testDeal() public {
+        // this is not as custom token
+        // this is the native eth (kind of airdropping native ETH)
+        vm.deal(_example1, 10 ether);
+        assertEq(address(_example1).balance, 10 ether, "ok");
+    }
+
+    // hoax in solidity
+    function testHoax() public {
+        // hoax will do these two steps indeed
+        // vm.deal(_example1, 10 ether);
+        // vm.prank(_example1);
     }
 
     function testApproval() public {
@@ -80,5 +115,5 @@ contract HDI_Test is Test {
         vm.expectRevert();
         h.transferFrom(address(this), _example1, 51);
     }
-
+// 01:41:42
 }
