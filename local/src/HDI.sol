@@ -15,4 +15,8 @@ contract HDI is ERC20 {
         require(msg.sender == owner, "Must be the owner");
         _mint(to, amount);
     }
+
+    function test() public {
+
+    }
 }

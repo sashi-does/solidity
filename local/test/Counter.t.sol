@@ -11,6 +11,8 @@ contract TestContract is Test {
         c = new Counter(5);
     }
 
+    
+
     function testInc() public {
         c.increment();
         c.increment();

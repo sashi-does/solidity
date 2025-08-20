@@ -10,6 +10,8 @@ contract HDI_Test is Test {
     address _example1 = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
     address _example2 = 0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678;
 
+    event Transfer(address from, address to, uint value);
+
     function setUp() public {
         h = new HDI(0);
     }
@@ -59,7 +61,7 @@ contract HDI_Test is Test {
 
         vm.stopPrank();
 
-        assertEq(h.balanceOf(address(this)), 60);
+        assertEq(h.balanceOf(address(_example1)), 60);
 
     }
     
@@ -71,11 +73,20 @@ contract HDI_Test is Test {
         assertEq(address(_example1).balance, 10 ether, "ok");
     }
 
+    function testTransferEmit() public {
+
+        h.mint(_example1, 100);
+        emit Transfer(address(this), _example1, 100);
+    }
+
     // hoax in solidity
     function testHoax() public {
         // hoax will do these two steps indeed
-        // vm.deal(_example1, 10 ether);
-        // vm.prank(_example1);
+        // it is depreceated now
+        vm.deal(_example1, 10 ether);
+        vm.prank(_example1);
+
+        assertEq(address(_example1).balance, 10 ether, "ok");
     }
 
     function testApproval() public {
@@ -93,6 +104,10 @@ contract HDI_Test is Test {
         assertEq(h.balanceOf(address(this)), 75, "ok");
         assertEq(h.allowance(address(this), _example1), 25, "ok");
 
+    }
+
+    function testSendEth() public {
+        h.test{value: 10 ether}();
     }
 
     function test_RevertMint() public {
@@ -115,5 +130,6 @@ contract HDI_Test is Test {
         vm.expectRevert();
         h.transferFrom(address(this), _example1, 51);
     }
+
 // 01:41:42
 }
