@@ -14,6 +14,7 @@ contract BridgeETH is Ownable {
     mapping(address => uint256) pendingBalances;
     address public tokenAddress;
     constructor(address _tokenAddress) Ownable(msg.sender) {
+        // _tokenAddress = address of HDI contract
         tokenAddress = _tokenAddress;
     }
 
