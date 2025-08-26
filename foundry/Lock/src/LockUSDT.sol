@@ -18,8 +18,6 @@ contract LockUSDT {
         require(IRC20(usdt).allowance(msg.sender, address(this)) >= _amount);
         IRC20(usdt).transferFrom(msg.sender, address(this), _amount);
         users[msg.sender] += _amount;  
-
-
     }
 
     function withdraw() public {
